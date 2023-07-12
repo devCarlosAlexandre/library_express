@@ -1,6 +1,6 @@
 import mongose from "mongoose";
 
-mongose.connect("mongodb+srv://devCarlosAlexandre:trabalho1037@alura.vddlgwp.mongodb.net/?retryWrites=true&w=majority");
+mongose.connect(process.env.STRING_CONEXAO_DB);
 
 let db = mongose.connection;
 
