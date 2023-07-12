@@ -5,7 +5,9 @@ const router = express.Router();
 
 router
     .get("/livros", LivroController.getLivros)
+    .get("/livros/:id", LivroController.buscarLivroId)
     .post("/livros", LivroController.cadastrarLivro)
     .put("/livros/:id", LivroController.editarLivro)
+    .delete("/livros/:id", LivroController.deletarLivro)
 
 export default router;  
