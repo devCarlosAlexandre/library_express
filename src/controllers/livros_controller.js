@@ -19,6 +19,19 @@ class LivroController {
         });
     };
 
+    static editarLivro = (req, res) => {
+        const { id } = req.params;
+
+        livros.findByIdAndUpdate(id, { $set: req.body }, (err) => {
+            if (!err) {
+                res.status(200).send({ message: "Livro foi atualizado com sucesso" });
+            } else {
+                res.status(500).send({ message: `${err} - falha ao editar livro` });
+            }
+
+        })
+    }
+
 }
 
 export default LivroController;
