@@ -1,54 +1,59 @@
 import autores from "../models/Autor.js";
 
 class AutorController {
-  static getAutores = async (req, res) => {
+  static getAutores = async (req, res, next) => {
     try {
       const autoresResultado = await autores.find();
       res.status(200).json(autoresResultado);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   };
 
-  static cadastrarAutor = async (req, res) => {
+  static cadastrarAutor = async (req, res, next) => {
     let autor = new autores(req.body);
 
     try {
       await autor.save();
       res.status(201).send(autor.toJSON());
     } catch (error) {
-      res.status(500).send({ message: `${error} - falha ao cadastrar autor` });
+      next(error);
     }
 
   };
 
-  static editarAutor = async (req, res) => {
+  static editarAutor = async (req, res, next) => {
     const { id } = req.params;
     try {
       await autores.findByIdAndUpdate(id, { $set: req.body });
       res.status(200).send({ message: "autor foi atualizado com sucesso" });
     } catch (error) {
-      res.status(500).send({ message: `${error} - falha ao editar autor` });
+      next(error);
     }
   };
 
-  static buscarAutorId = async (req, res) => {
+  static buscarAutorId = async (req, res, next) => {
     const id = req.params.id;
     try {
-      await autores.findById(id);
-      res.status(200).send(autores);
+      const autoresResultado = await autores.findById(id);
+
+      if (autoresResultado === null) {
+        res.status(404).send({ message: "Autor não encontrado." });
+      }
+
+      res.status(200).send(autoresResultado);
     } catch (error) {
-      res.status(500).send({ message: "Houve um erro interno no servidor" });
+      next(error);
     }
   };
 
-  static deletarAutor = async (req, res) => {
+  static deletarAutor = async (req, res, next) => {
     const { id } = req.params;
     try {
       await autores.findByIdAndDelete(id);
       res.status(200).send({ message: "autor deletado com sucesso" });
     } catch (error) {
-      res.status(500).send(error);
+      next(error);
     }
   };
 
